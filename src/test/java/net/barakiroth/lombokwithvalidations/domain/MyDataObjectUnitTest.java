@@ -58,6 +58,17 @@ public class MyDataObjectUnitTest {
         */
     }
 
+    @Test
+    public void when_p_then_q() {
+        MyDataObject.MyDataObjectBuilder myDataObjectBuilder =
+                MyDataObject.builder(MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_01);
+        try {
+            myDataObjectBuilder.build();
+        } catch (Throwable e) {
+            System.out.println(e);
+        }
+    }
+
     void when_referencing_the_builder_then_no_compilation_error_should_occur_since_the_builder_class_is_public() {
         final MyDataObject.MyDataObjectBuilder myDoMyDataObjectBuilder;
     }

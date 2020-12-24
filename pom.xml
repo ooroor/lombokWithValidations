@@ -19,6 +19,7 @@
     <!-- END: Problematic bumps -->
 
     <assertj.version>3.18.1</assertj.version>
+    <commons-validator.version>1.7</commons-validator.version>
     <java.compilation.version>13</java.compilation.version>
     <junit-platform-commons.version>1.7.0</junit-platform-commons.version>
     <junit.pre.jupiter.version>4.13.1</junit.pre.jupiter.version>
@@ -37,8 +38,10 @@
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
     <mockito.version>3.6.28</mockito.version>
+    <commons-lang3.version>3.11</commons-lang3.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <slf4j-api.version>1.7.30</slf4j-api.version>
+    <validation-api.version>2.0.1.Final</validation-api.version>
   </properties>
 
   <dependencyManagement>
@@ -54,6 +57,19 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
       </dependency>
 
       <!-- Test stuff -->
@@ -123,8 +139,12 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
     </dependency>
 
     <!-- Test stuff -->

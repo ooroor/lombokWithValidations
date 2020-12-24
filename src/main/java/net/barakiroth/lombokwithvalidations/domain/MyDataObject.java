@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import net.barakiroth.lombokwithvalidations.domain.exceptions.MyDataObjectConstraintViolationException;
 
 @Builder(
         setterPrefix = "with",
@@ -41,8 +42,9 @@ public class MyDataObject {
             // to be able to get the builder's values because the builder
             // does not provide gettters of its fields.
             final MyDataObject unvalidatedMyDataObject = internalBuild();
-            MyDataObjectValidationStrategy.validate(unvalidatedMyDataObject, this.validationStrategies);
-            final MyDataObject validatedMyDataObject = unvalidatedMyDataObject; // For clarity :-)
+
+            final MyDataObject validatedMyDataObject =
+                    MyDataObjectValidationStrategy.validate(unvalidatedMyDataObject, this.validationStrategies);
 
             return validatedMyDataObject;
         }
