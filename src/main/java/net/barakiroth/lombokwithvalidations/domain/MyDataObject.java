@@ -49,7 +49,8 @@ public class MyDataObject {
 
             return validatedMyDataObject;
         }
-
+        // By letting lombok generate this method, it becomes public
+        // Please notify me if I am wrong.
         private MyDataObject internalBuild() {
             return new MyDataObject(this.i, this.s);
         }
