@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import net.barakiroth.lombokwithvalidations.domain.exceptions.MyDataObjectConstraintViolationException;
+import lombok.ToString;
 
 @Builder(
         setterPrefix = "with",
@@ -14,6 +14,7 @@ import net.barakiroth.lombokwithvalidations.domain.exceptions.MyDataObjectConstr
         builderMethodName = "internalBuilder")
 @AllArgsConstructor
 @Getter(AccessLevel.PUBLIC)
+@ToString
 public class MyDataObject {
 
     private final int i;
@@ -57,5 +58,4 @@ public class MyDataObject {
             this.validationStrategies = validationStrategies;
         }
     }
-
 }

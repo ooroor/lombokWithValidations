@@ -10,8 +10,8 @@ import java.util.Set;
 @Getter
 @ToString
 @AllArgsConstructor
-public class MyDataObjectConstraintViolation {
-    private final MyDataObjectValidationStrategy myDataObjectValidationStrategy;
+public class ConstraintViolation<T> {
+    private final T validationStrategy;
     private final Set<Pair<String, Object>> fieldsInvolvedInTheViolation;
     private final String msg;
 }
