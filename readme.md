@@ -19,9 +19,9 @@ final MyDataObject myDataObject =
 ```
 try {
     final MyDataObject myDataObject2 =
-            MyDataObject
-                    .builder(MyDataObjectValidationStrategy.S_IS_4_LONG)
-                    .build();
+        MyDataObject
+            .builder(MyDataObjectValidationStrategy.S_IS_4_LONG)
+            .build();
 } catch (MyDataObjectConstraintViolationException e) {
     e.printStackTrace();
 }
