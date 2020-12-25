@@ -66,23 +66,18 @@ public enum MyDataObjectValidationStrategy {
 
     public static MyDataObject validate(final MyDataObject unvalidatedMyDataObject, final MyDataObjectValidationStrategy[] validationStrategies) {
 
-        if (validationStrategies != null) {
+        final Set<MyDataObjectValidationStrategy> uniqueValidationStrategies = new HashSet<>();
+        uniqueValidationStrategies.addAll(Arrays.asList(validationStrategies));
 
-            final Set<MyDataObjectValidationStrategy> uniqueValidationStrategies = new HashSet<>();
-            uniqueValidationStrategies.addAll(Arrays.asList(validationStrategies));
-
-            final Set<ConstraintViolation<MyDataObjectValidationStrategy>> constraintViolations =
-                    uniqueValidationStrategies
-                            .stream()
-                            .map(myDataObjectValidationStrategy -> myDataObjectValidationStrategy.internalValidate(unvalidatedMyDataObject))
-                            .filter(constraintViolation -> constraintViolation != null)
-                            .collect(HashSet::new, HashSet::add, HashSet::addAll);
-            if (!constraintViolations.isEmpty()) {
-                final String msg = "There is/are " + constraintViolations.size() + " constraint violation(s)";
-                throw new MyDataObjectConstraintViolationException(msg, constraintViolations);
-            } else {
-                return unvalidatedMyDataObject;
-            }
+        final Set<ConstraintViolation<MyDataObjectValidationStrategy>> constraintViolations =
+                uniqueValidationStrategies
+                        .stream()
+                        .map(myDataObjectValidationStrategy -> myDataObjectValidationStrategy.internalValidate(unvalidatedMyDataObject))
+                        .filter(constraintViolation -> constraintViolation != null)
+                        .collect(HashSet::new, HashSet::add, HashSet::addAll);
+        if (!constraintViolations.isEmpty()) {
+            final String msg = "There is/are " + constraintViolations.size() + " constraint violation(s)";
+            throw new MyDataObjectConstraintViolationException(msg, constraintViolations);
         } else {
             return unvalidatedMyDataObject;
         }
