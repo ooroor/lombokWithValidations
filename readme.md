@@ -3,13 +3,14 @@
 - ... to use lombok for the boiler plate ornamentation of an immutable data object such as a builder, getters etc.
 - ... to instantiate only valid instances of an immutable data object
 - ... to make it impossible to create an instance of an immutable data object that does not satisfy a set of constraints (i.e. You do not and cannot first create an object and then check it for validity)
+- ... to validate the same object with different validation strategies depending on the needs of a specific use case
 ### This _IS_...:
   - ... a source of inspiration
 ### This is _NOT_...:
 - ... a library
 ### Usage
 ```
-final MyDataObject myDataObject =
+final MyDataObject myDataObject2 =
     MyDataObject
         .builder(MyDataObjectValidationStrategy.S_IS_4_LONG)
         .withS("abcd")

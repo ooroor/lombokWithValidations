@@ -32,7 +32,7 @@ public enum MyDataObjectValidationStrategy {
                     new HashSet<>() {{
                         add(new ImmutablePair("s", unvalidatedMyDataObject.getS()));
                     }},
-                    "\"length of s differs from 4");
+                    "length of s differs from 4");
         } else {
             constraintViolation = null;
         }
@@ -46,7 +46,7 @@ public enum MyDataObjectValidationStrategy {
                     new HashSet<>() {{
                         add(new ImmutablePair("s", unvalidatedMyDataObject.getS()));
                     }},
-                    "\"\"length of s not between 7 and 11");
+                    "length of s not between 7 and 11");
         } else {
             constraintViolation = null;
         }
@@ -70,11 +70,11 @@ public enum MyDataObjectValidationStrategy {
         uniqueValidationStrategies.addAll(Arrays.asList(validationStrategies));
 
         final Set<ConstraintViolation<MyDataObjectValidationStrategy>> constraintViolations =
-                uniqueValidationStrategies
-                        .stream()
-                        .map(myDataObjectValidationStrategy -> myDataObjectValidationStrategy.internalValidate(unvalidatedMyDataObject))
-                        .filter(constraintViolation -> constraintViolation != null)
-                        .collect(HashSet::new, HashSet::add, HashSet::addAll);
+            uniqueValidationStrategies
+                .stream()
+                .map(myDataObjectValidationStrategy -> myDataObjectValidationStrategy.internalValidate(unvalidatedMyDataObject))
+                .filter(constraintViolation -> constraintViolation != null)
+                .collect(HashSet::new, HashSet::add, HashSet::addAll);
         if (!constraintViolations.isEmpty()) {
             final String msg = "There is/are " + constraintViolations.size() + " constraint violation(s)";
             throw new MyDataObjectConstraintViolationException(msg, constraintViolations);

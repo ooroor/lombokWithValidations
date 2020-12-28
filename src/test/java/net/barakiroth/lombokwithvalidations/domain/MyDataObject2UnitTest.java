@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class MyDataObjectUnitTest {
+public class MyDataObject2UnitTest {
 
     @Test
     public void when_created_with_no_validation_then_no_exceptions_should_be_thrown() {
@@ -84,18 +84,18 @@ public class MyDataObjectUnitTest {
 
     void internal_build_should_be_private_NON_COMPILABLE() {
         final MyDataObject.MyDataObjectBuilder myDoBuilder = MyDataObject.builder(); // LEGAL: The class is not private
-        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
+        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject2.MyDataObjectBuilder'
     }
 
     void internal_builder_should_be_private_NON_COMPILABLE() {
         final MyDataObject.MyDataObjectBuilder myDoBuilder
-                // = MyDataObject.internalBuilder()
-                ;  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject'
+                // = MyDataObject2.internalBuilder()
+                ;  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject2'
     }
 
     void the_myDataObjectBuilder_constructor_should_be_private_NON_COMPILABLE() {
         final MyDataObject.MyDataObjectBuilder myDataObjectBuilder
-                //= new MyDataObject.MyDataObjectBuilder()
-                ; // ILLEGAL: 'MyDataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
+                //= new MyDataObject2.MyDataObjectBuilder()
+                ; // ILLEGAL: 'MyDataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject2.MyDataObjectBuilder'
     }
 }
