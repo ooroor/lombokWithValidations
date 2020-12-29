@@ -1,6 +1,6 @@
 package net.barakiroth.lombokwithvalidations.domain;
 
-import net.barakiroth.lombokwithvalidations.domain.exceptions.MyDataObjectConstraintViolationException;
+import net.barakiroth.lombokwithvalidations.domain.exceptions.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class MyDataObject2UnitTest {
+public class MyDataObjectUnitTest {
 
     @Test
     public void when_created_with_no_validation_then_no_exceptions_should_be_thrown() {
@@ -16,23 +16,33 @@ public class MyDataObject2UnitTest {
     }
 
     @Test
-    public void when_created_with_one_validation_and_that_is_satisfied_then_no_exceptions_should_be_thrown() {
+    public void when_created_with_I_IS_7_and_that_is_satisfied_then_no_exceptions_should_be_thrown() {
         assertThatCode(() -> MyDataObject.builder(MyDataObjectValidationStrategy.I_IS_7).withI(7).build()).doesNotThrowAnyException();
     }
 
     @Test
-    public void when_validating_an_empty_object_with_VALIDATION_STRATEGIES_01_then_exception_should_be_thrown() {
+    public void when_created_with_S_IS_4_LONG_and_that_is_satisfied_then_no_exceptions_should_be_thrown() {
+        assertThatCode(() -> MyDataObject.builder(MyDataObjectValidationStrategy.S_IS_4_LONG).withS("pqrs").build()).doesNotThrowAnyException();
+    }
+
+    @Test
+    public void when_created_with_S_IS_BETWEEN_7_AND_11_LONG_and_that_is_satisfied_then_no_exceptions_should_be_thrown() {
+        assertThatCode(() -> MyDataObject.builder(MyDataObjectValidationStrategy.S_IS_BETWEEN_7_AND_11_LONG).withS("pqrs1234").build()).doesNotThrowAnyException();
+    }
+
+    @Test
+    public void when_validating_an_empty_object_with_VALIDATION_STRATEGIES_01_then_an_exception_should_be_thrown() {
 
         assertThatThrownBy(() -> {
             MyDataObject.builder(MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_01).build();
         })
-            .isInstanceOf(MyDataObjectConstraintViolationException.class)
-            .hasMessageContaining("There is/are " + MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_01.length + " constraint violation(s)")
+            .isInstanceOf(ConstraintViolationException.class)
+            .hasMessageContaining("There are 2 constraint violations: {1: ")
         ;
     }
 
     @Test
-    public void when_validating_an_empty_object_with_different_validation_strategies_collections_then_exception_should_be_thrown_and_be_equipped_as_expected() {
+    public void when_validating_an_empty_object_with_different_validation_strategies_collections_then_exceptions_should_be_thrown_and_be_equipped_as_expected() {
 
         final MyDataObjectValidationStrategy[][] strategiesCollections =
                 new MyDataObjectValidationStrategy[][] {
@@ -48,19 +58,19 @@ public class MyDataObject2UnitTest {
                     final Throwable thrown = catchThrowable(() -> {
                         MyDataObject.builder(expectedViolatedStrategies).build(); // No fields set, which surely will generate violation(s)
                     });
-                    assertThat(thrown).isInstanceOf(MyDataObjectConstraintViolationException.class);
+                    assertThat(thrown).isInstanceOf(ConstraintViolationException.class);
 
-                    final MyDataObjectConstraintViolationException actualException =
-                            (MyDataObjectConstraintViolationException)thrown;
+                    final ConstraintViolationException actualException =
+                            (ConstraintViolationException)thrown;
 
                     final Set<MyDataObjectValidationStrategy> uniqueExpectedViolations = new HashSet<>();
                     uniqueExpectedViolations.addAll(Arrays.asList(expectedViolatedStrategies));
 
                     assertThat(actualException.getConstraintViolations().size())
-                        .as("Duplicate constraints gave rise to moe than one corresponding violation. strategies: " + expectedViolatedStrategies)
+                        .as("Duplicate constraints gave rise to more than one corresponding violation. strategies: " + expectedViolatedStrategies)
                         .isEqualTo(uniqueExpectedViolations.size());
 
-                    final Set<MyDataObjectValidationStrategy> actualViolatedStrategies =
+                    final Set<AbstractValidationStrategy<?>> actualViolatedStrategies =
                         actualException
                             .getConstraintViolations()
                             .stream()
@@ -79,23 +89,26 @@ public class MyDataObject2UnitTest {
     }
 
     void when_referencing_the_builder_then_no_compilation_error_should_occur_since_the_builder_class_is_public_NON_COMPILABLE() {
-        final MyDataObject.MyDataObjectBuilder myDoMyDataObjectBuilder;
+        final MyDataObject.MyDataObjectBuilder myDoMyDataObjectBuilder; // LEGAL: The class is not private
     }
 
     void internal_build_should_be_private_NON_COMPILABLE() {
-        final MyDataObject.MyDataObjectBuilder myDoBuilder = MyDataObject.builder(); // LEGAL: The class is not private
-        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject2.MyDataObjectBuilder'
+        final MyDataObject.MyDataObjectBuilder myDoBuilder = MyDataObject.builder();
+        // Comment out to confirm compiler error:
+        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
     }
 
     void internal_builder_should_be_private_NON_COMPILABLE() {
         final MyDataObject.MyDataObjectBuilder myDoBuilder
-                // = MyDataObject2.internalBuilder()
-                ;  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject2'
+                // Comment out to confirm compiler error:
+                // = MyDataObject.internalBuilder()  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject'
+        ;
     }
 
     void the_myDataObjectBuilder_constructor_should_be_private_NON_COMPILABLE() {
         final MyDataObject.MyDataObjectBuilder myDataObjectBuilder
-                //= new MyDataObject2.MyDataObjectBuilder()
-                ; // ILLEGAL: 'MyDataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject2.MyDataObjectBuilder'
+                // Comment out to confirm compiler error:
+                // = new MyDataObject.MyDataObjectBuilder()
+                ; // ILLEGAL: 'MyDataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
     }
 }

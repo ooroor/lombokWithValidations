@@ -45,7 +45,7 @@ public class MyDataObject {
             final MyDataObject unvalidatedMyDataObject = internalBuild();
 
             final MyDataObject validatedMyDataObject =
-                    MyDataObjectValidationStrategy.validate(unvalidatedMyDataObject, this.validationStrategies);
+                    AbstractValidationStrategy.validate(unvalidatedMyDataObject, this.validationStrategies);
 
             return validatedMyDataObject;
         }
@@ -55,7 +55,7 @@ public class MyDataObject {
             return new MyDataObject(this.i, this.s);
         }
 
-        private void setValidationStrategies(final MyDataObjectValidationStrategy[] validationStrategies) {
+        private void setValidationStrategies(MyDataObjectValidationStrategy[] validationStrategies) {
             this.validationStrategies = validationStrategies;
         }
     }

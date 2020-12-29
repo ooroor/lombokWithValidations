@@ -10,7 +10,7 @@
 - ... a library
 ### Usage
 ```
-final MyDataObject myDataObject2 =
+final MyDataObject myDataObject =
     MyDataObject
         .builder(MyDataObjectValidationStrategy.S_IS_4_LONG)
         .withS("abcd")
@@ -19,7 +19,7 @@ final MyDataObject myDataObject2 =
 ```
 ```
 try {
-    final MyDataObject myDataObject2 =
+    final MyDataObject myDataObject =
         MyDataObject
             .builder(MyDataObjectValidationStrategy.S_IS_4_LONG)
             .build();
