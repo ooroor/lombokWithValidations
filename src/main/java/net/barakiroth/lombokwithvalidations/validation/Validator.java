@@ -4,16 +4,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Validator<DATA_OBJECT> {
+public class Validator {
 
-    public DATA_OBJECT validate(
+    private Validator() {}
+
+    public static <DATA_OBJECT> DATA_OBJECT validate(
             final DATA_OBJECT unvalidatedMyDataObject,
             final IValidationStrategy<DATA_OBJECT>[] validationStrategies) {
 
-
         final Set<IValidationStrategy<DATA_OBJECT>> uniqueValidationStrategies = new HashSet<>();
         uniqueValidationStrategies.addAll(Arrays.asList(validationStrategies));
-
 
         final Set<ConstraintViolation<?>> constraintViolations =
                 uniqueValidationStrategies

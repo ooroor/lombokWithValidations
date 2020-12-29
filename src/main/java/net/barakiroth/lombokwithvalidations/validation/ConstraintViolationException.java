@@ -1,7 +1,6 @@
 package net.barakiroth.lombokwithvalidations.validation;
 
 import lombok.Getter;
-import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
 
 import java.util.Collections;
 import java.util.Set;

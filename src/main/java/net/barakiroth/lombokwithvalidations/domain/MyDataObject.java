@@ -36,8 +36,7 @@ public class MyDataObject {
 
         private MyDataObjectValidationStrategy[] validationStrategies;
 
-        private MyDataObjectBuilder() {
-        }
+        private MyDataObjectBuilder() {}
 
         public MyDataObject build() {
 
@@ -47,10 +46,11 @@ public class MyDataObject {
             final MyDataObject unvalidatedMyDataObject = internalBuild();
 
             final MyDataObject validatedMyDataObject =
-                new Validator<MyDataObject>().validate(unvalidatedMyDataObject, this.validationStrategies);
+                Validator.validate(unvalidatedMyDataObject, this.validationStrategies);
 
             return validatedMyDataObject;
         }
+
         // By letting lombok generate this method, it becomes public
         // Please notify me if I am wrong.
         private MyDataObject internalBuild() {
