@@ -1,7 +1,7 @@
 package net.barakiroth.lombokwithvalidations.domain;
 
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolationException;
-import net.barakiroth.lombokwithvalidations.validation.AbstractValidationStrategy;
+import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -74,7 +74,7 @@ public class MyDataObjectUnitTest {
                         .as("Duplicate constraints gave rise to more than one corresponding violation. strategies: " + expectedViolatedStrategies)
                         .isEqualTo(uniqueExpectedViolations.size());
 
-                    final Set<AbstractValidationStrategy<?>> actualViolatedStrategies =
+                    final Set<IValidationStrategy<?>> actualViolatedStrategies =
                         actualException
                             .getConstraintViolations()
                             .stream()

@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 public class ConstraintViolation<DATA_OBJECT> {
-    private final AbstractValidationStrategy<DATA_OBJECT> validationStrategy;
+    private final IValidationStrategy<DATA_OBJECT> validationStrategy;
     private final String msg;
     private final Set<Pair<String, Object>> fieldsInvolvedInTheViolation;
 

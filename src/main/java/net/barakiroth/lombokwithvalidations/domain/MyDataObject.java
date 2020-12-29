@@ -24,6 +24,7 @@ public class MyDataObject {
     public static MyDataObjectBuilder builder(final MyDataObjectValidationStrategy... validationStrategies) {
         final MyDataObjectBuilder myDataObjectBuilder = MyDataObject.internalBuilder();
         myDataObjectBuilder.setValidationStrategies(validationStrategies);
+
         return myDataObjectBuilder;
     }
 
