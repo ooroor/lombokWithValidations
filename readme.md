@@ -26,8 +26,11 @@ try {
     log.error(e.toString());
 }
 ```
+
 ### Writing your own code
 1. Write your own data object class by copying and tweeking ```MyDataObject```. (NB! Do not forget the ```internalBuild()``` method!)
-0. Write your own data object constraint violation strategy by copying and tweeking ```MyDataObjectValidationStrategy``` 
+0. Write your own data object constraint violation strategy by copying and tweeking ```MyDataObjectValidationStrategy```
+### Useful commands
+- ```mvn versions:display-dependency-updates``` 
 # Refs:
 [Be Careful With Lombok](https://levelup.gitconnected .com/be-careful-with-lombok-2e2edfc01110)

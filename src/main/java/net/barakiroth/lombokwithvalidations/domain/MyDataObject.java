@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import net.barakiroth.lombokwithvalidations.validation.AbstractValidationStrategy;
+import net.barakiroth.lombokwithvalidations.validation.Validator;
 
 @Builder(
         setterPrefix = "with",
@@ -46,7 +46,7 @@ public class MyDataObject {
             final MyDataObject unvalidatedMyDataObject = internalBuild();
 
             final MyDataObject validatedMyDataObject =
-                    AbstractValidationStrategy.validate(unvalidatedMyDataObject, this.validationStrategies);
+                new Validator<MyDataObject>().validate(unvalidatedMyDataObject, this.validationStrategies);
 
             return validatedMyDataObject;
         }

@@ -2,6 +2,7 @@ package net.barakiroth.lombokwithvalidations.domain;
 
 import net.barakiroth.lombokwithvalidations.validation.AbstractValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
+import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -9,7 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-public class MyDataObjectValidationStrategy extends AbstractValidationStrategy<MyDataObject> {
+public class MyDataObjectValidationStrategy
+        extends AbstractValidationStrategy<MyDataObject>
+        implements IValidationStrategy<MyDataObject> {
 
     public static final MyDataObjectValidationStrategy I_IS_7 =
             new MyDataObjectValidationStrategy(
