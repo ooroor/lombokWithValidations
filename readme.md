@@ -28,7 +28,7 @@ try {
 ### Future enhancements
 - Differentiate between warning and error violation strategies
 ### Writing your own code
-1. Write your own data object class by copying and tweeking ```MyDataObject```. (NB! Do not forget the ```internalBuild()``` method!)
+1. Write your own data object class by copying and tweeking ```MyDataObject```. (NB! Implement the ```internalBuild()``` method carefully.)
 0. Write your own data object constraint violation strategy by copying and tweeking ```MyDataObjectValidationStrategy```
 ### Useful commands
 - ```mvn versions:display-dependency-updates``` 

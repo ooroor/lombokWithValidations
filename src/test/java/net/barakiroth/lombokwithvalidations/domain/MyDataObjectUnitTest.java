@@ -15,6 +15,24 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 public class MyDataObjectUnitTest {
 
     @Test
+    void when_setting_i_then_the_same_value_should_be_retrieved() {
+
+        final int expectedI = 198;
+        final MyDataObject myDataObject = MyDataObject.builder().withI(expectedI).build();
+        final int actualI = myDataObject.getI();
+        assertThat(actualI).isEqualTo(expectedI).as("Setting and getting i give different values");
+    }
+
+    @Test
+    void when_setting_s_then_the_same_value_should_be_retrieved() {
+
+        final String expectedS = "kdsfjvnbkdsjfnb cvkjnbkjc nkj bkujbekub kujebkuvbeku bvkubewkuekub";
+        final MyDataObject myDataObject = MyDataObject.builder().withS(expectedS).build();
+        final String actualS = myDataObject.getS();
+        assertThat(actualS).isEqualTo(expectedS).as("Setting and getting s give different values");
+    }
+
+    @Test
     public void when_created_with_no_validation_then_no_exceptions_should_be_thrown() {
         assertThatCode(() -> MyDataObject.builder().build()).doesNotThrowAnyException();
     }
