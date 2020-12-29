@@ -6,7 +6,7 @@
 
   <groupId>net.barakiroth.lombokwithvalidations</groupId>
   <artifactId>lombokwithvalidations</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 
   <name>lombokwithvalidations</name>
   <url>https://github.com/ooroor/lombokWithValidations</url>
@@ -33,7 +33,6 @@
     <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
-    <mockito.version>3.6.28</mockito.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <slf4j-api.version>2.0.0-alpha1</slf4j-api.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
@@ -104,18 +103,6 @@
         <version>${assertj.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-junit-jupiter</artifactId>
-        <version>${mockito.version}</version>
-      </dependency>
-
     </dependencies>
   </dependencyManagement>
 
@@ -176,18 +163,6 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
 
