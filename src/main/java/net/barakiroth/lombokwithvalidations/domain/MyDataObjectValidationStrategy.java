@@ -1,5 +1,7 @@
 package net.barakiroth.lombokwithvalidations.domain;
 
+import net.barakiroth.lombokwithvalidations.validation.AbstractValidationStrategy;
+import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 

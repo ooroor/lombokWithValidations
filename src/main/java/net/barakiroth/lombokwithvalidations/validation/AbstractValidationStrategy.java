@@ -1,6 +1,4 @@
-package net.barakiroth.lombokwithvalidations.domain;
-
-import net.barakiroth.lombokwithvalidations.domain.exceptions.ConstraintViolationException;
+package net.barakiroth.lombokwithvalidations.validation;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -1,6 +1,7 @@
 package net.barakiroth.lombokwithvalidations.domain;
 
-import net.barakiroth.lombokwithvalidations.domain.exceptions.ConstraintViolationException;
+import net.barakiroth.lombokwithvalidations.validation.ConstraintViolationException;
+import net.barakiroth.lombokwithvalidations.validation.AbstractValidationStrategy;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.HashSet;

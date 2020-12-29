@@ -1,4 +1,4 @@
-package net.barakiroth.lombokwithvalidations.domain;
+package net.barakiroth.lombokwithvalidations.validation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

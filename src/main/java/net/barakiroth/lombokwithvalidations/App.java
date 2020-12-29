@@ -2,7 +2,7 @@ package net.barakiroth.lombokwithvalidations;
 
 import net.barakiroth.lombokwithvalidations.domain.MyDataObject;
 import net.barakiroth.lombokwithvalidations.domain.MyDataObjectValidationStrategy;
-import net.barakiroth.lombokwithvalidations.domain.exceptions.ConstraintViolationException;
+import net.barakiroth.lombokwithvalidations.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
