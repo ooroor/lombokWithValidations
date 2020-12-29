@@ -1,9 +1,8 @@
 # Example on how to combine lombok data objects with validation
 ## Intention
-- ... to use lombok for the boiler plate ornamentation of an immutable data object such as a builder, getters etc.
-- ... to instantiate only valid instances of an immutable data object
-- ... to make it impossible to create an instance of an immutable data object that does not satisfy a set of constraints (i.e. You do not and cannot first create an object and then check it for validity)
-- ... to validate the same object with different validation strategies depending on the needs of a specific use case
+- ... to use lombok ornamentation for the boiler plate of an immutable data object using a builder, getters etc.
+- ... to be able to instantiate only valid instances of an immutable data object
+- ... to be able to validate the same object with different validation strategies depending on the needs of a specific use case
 ### This _IS_...:
   - ... a source of inspiration
 ### This is _NOT_...:
@@ -26,7 +25,8 @@ try {
     log.error(e.toString());
 }
 ```
-
+### Future enhancements
+- Differentiate between warning and error violation strategies
 ### Writing your own code
 1. Write your own data object class by copying and tweeking ```MyDataObject```. (NB! Do not forget the ```internalBuild()``` method!)
 0. Write your own data object constraint violation strategy by copying and tweeking ```MyDataObjectValidationStrategy```
