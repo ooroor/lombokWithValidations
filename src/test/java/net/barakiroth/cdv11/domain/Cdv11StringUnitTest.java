@@ -1,19 +1,12 @@
-package net.barakiroth.lombokwithvalidations.domain;
-
-import net.barakiroth.lombokwithvalidations.validation.ConstraintViolationException;
-import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
-import org.junit.jupiter.api.Test;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+package net.barakiroth.cdv11.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class MyDataObjectUnitTest {
-
+public class Cdv11UnitTest {
+/*
     @Test
     void when_setting_i_then_the_same_value_should_be_retrieved() {
 
@@ -133,4 +126,6 @@ public class MyDataObjectUnitTest {
                 // = new MyDataObject.MyDataObjectBuilder()
                 ; // ILLEGAL: 'MyDataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
     }
+
+ */
 }
