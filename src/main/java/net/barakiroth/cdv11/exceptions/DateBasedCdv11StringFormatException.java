@@ -1,11 +1,12 @@
-package net.barakiroth.cdv11;
+package net.barakiroth.cdv11.exceptions;
 
-public class DateBasedCdv11StringException extends Throwable {
-    public DateBasedCdv11StringException(final String message) {
+public class DateBasedCdv11StringFormatException extends Throwable {
+
+    public DateBasedCdv11StringFormatException(final String message) {
         super(message);
     }
 
-    public DateBasedCdv11StringException(final String message, final Throwable cause) {
+    public DateBasedCdv11StringFormatException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

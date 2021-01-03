@@ -1,12 +1,12 @@
-package net.barakiroth.cdv11;
+package net.barakiroth.cdv11.exceptions;
 
-public class CannotCreateCdv11Exception extends Exception {
+public class Cdv11StringFormatException extends Exception {
 
-    public CannotCreateCdv11Exception(final String msg) {
+    public Cdv11StringFormatException(final String msg) {
         super(msg);
     }
 
-    public CannotCreateCdv11Exception(final Throwable e) {
+    public Cdv11StringFormatException(final Throwable e) {
         super(e);
     }
 }

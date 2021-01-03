@@ -4,9 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.barakiroth.lombokwithvalidations</groupId>
-  <artifactId>lombokwithvalidations</artifactId>
-  <version>1.0.7</version>
+  <groupId>net.barakiroth.cdv11</groupId>
+  <artifactId>cdv11</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
 
   <name>lombokwithvalidations</name>
   <url>https://github.com/ooroor/lombokWithValidations</url>
@@ -107,6 +107,13 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>30.1-jre</version>
+    </dependency>
+
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -127,6 +134,12 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
     </dependency>
 
     <!-- Test stuff -->
