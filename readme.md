@@ -37,6 +37,7 @@ if (constraintViolations.size() > 0) {
 }
 ```
 ### Future enhancements
+- None I am thinking of just now
 ### Writing your own code
 1. Write your own data object class by copying and tweeking ```MyDataObject```. (NB! Implement the ```internalBuild()``` method carefully.)
 0. Write your own data object constraint violation strategy by copying and tweeking ```MyDataObjectValidationStrategy```
