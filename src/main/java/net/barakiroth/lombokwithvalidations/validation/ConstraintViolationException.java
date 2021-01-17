@@ -2,7 +2,7 @@ package net.barakiroth.lombokwithvalidations.validation;
 
 import lombok.Getter;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,11 +11,12 @@ public class ConstraintViolationException extends RuntimeException {
     @Getter
     private final Set<ConstraintViolation<?>> constraintViolations;
 
-    public ConstraintViolationException(
+    public <DATA_OBJECT> ConstraintViolationException(
             final String msg,
-            final Set<ConstraintViolation<?>> constraintViolations) {
+            final Set<ConstraintViolation<DATA_OBJECT>> constraintViolations) {
         super(msg);
-        this.constraintViolations = Collections.unmodifiableSet(constraintViolations);
+        this.constraintViolations = new HashSet<>();
+        this.constraintViolations.addAll(constraintViolations);
     }
 
     @Override
@@ -25,16 +26,16 @@ public class ConstraintViolationException extends RuntimeException {
         return super.getMessage()
                 + ": "
                 + this.constraintViolations
-                    .stream()
-                    .map((constraintViolation) -> constraintViolation.toString())
-                    .reduce(
-                            "",
-                            (partialString, constraintViolation) ->
-                                    partialString
-                                            + ("".equals(partialString) ? "" : ", ")
-                                            + "{" + i.incrementAndGet()
-                                            + ": <"
-                                            + constraintViolation
-                                            + ">}");
+                .stream()
+                .map((constraintViolation) -> constraintViolation.toString())
+                .reduce(
+                        "",
+                        (partialString, constraintViolation) ->
+                                partialString
+                                        + ("".equals(partialString) ? "" : ", ")
+                                        + "{" + i.incrementAndGet()
+                                        + ": <"
+                                        + constraintViolation
+                                        + ">}");
     }
 }

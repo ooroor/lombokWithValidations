@@ -1,5 +1,7 @@
 package net.barakiroth.lombokwithvalidations.validation;
 
 public interface IValidationStrategy<DATA_OBJECT> {
-    ConstraintViolation<DATA_OBJECT> validate(final DATA_OBJECT unvalidatedMyDataObject);
+    enum Severity {ERR, WARN}
+
+    ConstraintViolation<DATA_OBJECT> validate(final DATA_OBJECT unvalidatedMyDataObject, final IValidationStrategy.Severity severity);
 }

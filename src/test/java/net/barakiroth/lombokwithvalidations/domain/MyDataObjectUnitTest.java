@@ -1,8 +1,11 @@
 package net.barakiroth.lombokwithvalidations.domain;
 
+import net.barakiroth.lombokwithvalidations.validation.CategorizedValidationStrategy;
+import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolationException;
 import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
 import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,8 +61,8 @@ public class MyDataObjectUnitTest {
         assertThatThrownBy(() -> {
             MyDataObject.builder(MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_01).build();
         })
-            .isInstanceOf(ConstraintViolationException.class)
-            .hasMessageContaining("There are 2 constraint violations: {1: ")
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("There are 2 constraint violations, and at least one of them is of type ERR: {1: ")
         ;
     }
 
@@ -67,70 +70,291 @@ public class MyDataObjectUnitTest {
     public void when_validating_an_empty_object_with_different_validation_strategies_collections_then_exceptions_should_be_thrown_and_be_equipped_as_expected() {
 
         final MyDataObjectValidationStrategy[][] strategiesCollections =
-                new MyDataObjectValidationStrategy[][] {
-                    MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_01,
-                    MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_02,
-                    new MyDataObjectValidationStrategy[]{MyDataObjectValidationStrategy.I_IS_7, MyDataObjectValidationStrategy.I_IS_7}
-        };
+                new MyDataObjectValidationStrategy[][]{
+                        MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_01,
+                        MyDataObjectValidationStrategy.VALIDATION_STRATEGIES_02,
+                        new MyDataObjectValidationStrategy[]{MyDataObjectValidationStrategy.I_IS_7, MyDataObjectValidationStrategy.I_IS_7}
+                };
 
         Arrays.stream(strategiesCollections).
-            forEach(
-                (expectedViolatedStrategies) ->
-                {
-                    final Throwable thrown = catchThrowable(() -> {
-                        MyDataObject.builder(expectedViolatedStrategies).build(); // No fields set, which surely will generate violation(s)
-                    });
-                    assertThat(thrown).isInstanceOf(ConstraintViolationException.class);
+                forEach(
+                        (expectedViolatedStrategies) ->
+                        {
+                            final Throwable thrown = catchThrowable(() -> {
+                                MyDataObject.builder(expectedViolatedStrategies).build(); // No fields set, which surely will generate violation(s)
+                            });
+                            assertThat(thrown).isInstanceOf(ConstraintViolationException.class);
 
-                    final ConstraintViolationException actualException =
-                            (ConstraintViolationException)thrown;
+                            final ConstraintViolationException actualException =
+                                    (ConstraintViolationException) thrown;
 
-                    final Set<MyDataObjectValidationStrategy> uniqueExpectedViolations = new HashSet<>();
-                    uniqueExpectedViolations.addAll(Arrays.asList(expectedViolatedStrategies));
+                            final Set<MyDataObjectValidationStrategy> uniqueExpectedViolations =
+                                    new HashSet<>(Arrays.asList(expectedViolatedStrategies));
 
-                    assertThat(actualException.getConstraintViolations().size())
-                        .as("Duplicate constraints gave rise to more than one corresponding violation. strategies: " + expectedViolatedStrategies)
-                        .isEqualTo(uniqueExpectedViolations.size());
+                            assertThat(actualException.getConstraintViolations().size())
+                                    .as(
+                                            "Duplicate constraints gave rise to more than one corresponding violation. strategies: "
+                                                    + Arrays.toString(expectedViolatedStrategies))
+                                    .isEqualTo(uniqueExpectedViolations.size());
 
-                    final Set<IValidationStrategy<?>> actualViolatedStrategies =
-                        actualException
-                            .getConstraintViolations()
-                            .stream()
-                            .map(
-                                (actualViolatedStrategy) ->
-                                    actualViolatedStrategy.getValidationStrategy()
-                            )
-                            .collect(HashSet::new, HashSet::add, HashSet::addAll)
-                            ;
+                            final Set<IValidationStrategy<?>> actualViolatedStrategies =
+                                    actualException
+                                            .getConstraintViolations()
+                                            .stream()
+                                            .map(
+                                                    (actualConstraintViolation) ->
+                                                            actualConstraintViolation.getCategorizedValidationStrategy().getValidationStrategy()
+                                            )
+                                            .collect(HashSet::new, HashSet::add, HashSet::addAll);
 
-                    assertThat(actualViolatedStrategies)
-                        .as("There is at least one violation that is not represented in the exception")
-                        .containsAll(uniqueExpectedViolations);
-                }
-            );
+                            assertThat(actualViolatedStrategies)
+                                    .as("There is at least one violation that is not represented in the exception")
+                                    .containsAll(uniqueExpectedViolations);
+                        }
+                );
+    }
+
+    @Test
+    void when_created_with_error_strategy_and_it_is_violated_then_an_exception_should_be_thrown() {
+
+        assertThatThrownBy(
+                () ->
+                        MyDataObject
+                                .builder(CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.I_IS_7))
+                                .build()
+        )
+                .isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void when_created_with_warning_strategy_and_it_is_violated_then_the_supplied_violations_should_contain_the_warning() {
+        final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
+        assertThatCode(() -> MyDataObject.builder(CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7)).build(constraintViolations)).doesNotThrowAnyException();
+        assertThat(constraintViolations.size()).isEqualTo(1);
+
+        final ConstraintViolation<MyDataObject> constraintViolation = constraintViolations.iterator().next();
+        assertThat(constraintViolation.getCategorizedValidationStrategy().getSeverity()).isEqualTo(IValidationStrategy.Severity.WARN);
+        assertThat(constraintViolation.getCategorizedValidationStrategy().getValidationStrategy()).isEqualTo(MyDataObjectValidationStrategy.I_IS_7);
+    }
+
+    @Test
+    void when_created_with_warning_and_error_strategies_and_they_are_violated_then_an_exception_should_be_thrown() {
+
+        assertThatThrownBy(
+                () ->
+                        MyDataObject
+                                .builder(
+                                        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.S_IS_4_LONG)
+                                )
+                                .build()
+        ).isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void when_created_with_warning_and_error_strategies_and_only_the_warning_is_violated_then_no_exception_should_be_thrown() {
+
+        assertThatCode(
+                () -> MyDataObject.builder(
+                        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.S_IS_4_LONG)
+
+                )
+                        .withS("abcd")
+                        .build())
+                .doesNotThrowAnyException();
+    }
+
+    @Test
+    void when_created_with_warning_and_error_strategies_and_only_the_warning_is_violated_then_the_supplied_constraint_violations_should_contain_only_one() {
+
+        final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
+
+        MyDataObject.builder(
+                CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.S_IS_BETWEEN_7_AND_11_LONG)
+        )
+                .withS("123456789")
+                .build(constraintViolations);
+        assertThat(constraintViolations.size()).isEqualTo(1);
+        assertThat(
+                constraintViolations
+                        .stream()
+                        .anyMatch(
+                                (constraintViolation) ->
+                                        constraintViolation.getCategorizedValidationStrategy().getSeverity().equals(IValidationStrategy.Severity.WARN)
+                                                &&
+                                                constraintViolation.getCategorizedValidationStrategy().getValidationStrategy().equals(MyDataObjectValidationStrategy.I_IS_7)
+                        )
+        )
+                .as("Expected constraint violation was not found")
+                .isTrue();
+
+        if (constraintViolations.size() > 0) {
+            // Find out what happened by scrutinizing the content of the constraintViolations collection
+        }
+    }
+
+
+    @Test
+    void when_created_with_warning_and_error_strategies_and_only_the_error_is_violated_then_an_exception_should_be_thrown() {
+
+        final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
+        assertThatThrownBy(
+                () -> MyDataObject.builder(
+                        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.S_IS_4_LONG)
+                )
+                        .withI(7)
+                        .build(constraintViolations)
+        )
+                .isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void when_created_with_warning_and_error_strategies_and_only_the_error_is_violated_then_the_exception_should_contain_only_one() {
+
+        final ConstraintViolationException constraintViolationException =
+                (ConstraintViolationException)
+                        catchThrowable(
+                                () -> MyDataObject.builder(
+                                        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.S_IS_4_LONG)
+                                )
+                                        .withI(7)
+                                        .build()
+                        );
+
+        final Set<ConstraintViolation<?>> constraintViolations = // TODO: Fix the generics
+                constraintViolationException.getConstraintViolations();
+        assertThat(constraintViolations.size()).isEqualTo(1);
+
+        assertThat(
+                constraintViolations
+                        .stream()
+                        .anyMatch(
+                                (constraintViolation) ->
+                                        constraintViolation.getCategorizedValidationStrategy().getSeverity().equals(IValidationStrategy.Severity.ERR)
+                                                &&
+                                                constraintViolation.getCategorizedValidationStrategy().getValidationStrategy().equals(MyDataObjectValidationStrategy.S_IS_4_LONG)
+                        )
+        )
+                .as("Expected constraint violation was not found")
+                .isTrue();
+    }
+
+    @Test
+    void when_created_with_two_identical_categorized_strategies_and_they_are_both_violated_then_the_supplied_constraint_violations_should_contain_only_one() {
+
+        final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
+        assertThatThrownBy(
+                () -> MyDataObject.builder(
+                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.I_IS_7),
+                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.I_IS_7)
+                ).build(constraintViolations)
+        )
+                .isInstanceOf(ConstraintViolationException.class);
+        assertThat(constraintViolations.size()).isEqualTo(1);
+        assertThat(
+                constraintViolations
+                        .stream()
+                        .anyMatch(
+                                (constraintViolation) ->
+                                        constraintViolation.getCategorizedValidationStrategy().getSeverity().equals(IValidationStrategy.Severity.ERR)
+                                                &&
+                                                constraintViolation.getCategorizedValidationStrategy().getValidationStrategy().equals(MyDataObjectValidationStrategy.I_IS_7)
+                        )
+        )
+                .as("Expected constraint violation was not found")
+                .isTrue();
+    }
+
+    @Test
+    void when_created_with_two_identical_strategies_with_different_severities_then_the_error_one_should_be_reacted_upon() {
+
+        final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
+        assertThatThrownBy(
+                () -> MyDataObject.builder(
+                        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.I_IS_7)
+                ).build(constraintViolations)
+        )
+                .isInstanceOf(ConstraintViolationException.class);
+        assertThat(constraintViolations.size()).isEqualTo(1);
+        assertThat(
+                constraintViolations
+                        .stream()
+                        .anyMatch(
+                                (constraintViolation) ->
+                                        constraintViolation.getCategorizedValidationStrategy().getSeverity().equals(IValidationStrategy.Severity.ERR)
+                                                &&
+                                                constraintViolation.getCategorizedValidationStrategy().getValidationStrategy().equals(MyDataObjectValidationStrategy.I_IS_7)
+                        )
+        )
+                .as("Expected constraint violation was not found")
+                .isTrue();
+    }
+
+    @Test
+    void when_created_with_warning_and_error_strategies_and_they_are_violated_then_the_constraintViolations_should_be_populated_with_them_both() {
+
+        final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
+        assertThatThrownBy(
+                () -> MyDataObject.builder(
+                        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+                        CategorizedValidationStrategy.ofErr(MyDataObjectValidationStrategy.S_IS_4_LONG)
+                ).build(constraintViolations)
+        )
+                .isInstanceOf(ConstraintViolationException.class);
+        assertThat(constraintViolations.size()).isEqualTo(2);
+        assertThat(
+                constraintViolations
+                        .stream()
+                        .anyMatch(
+                                (constraintViolation) ->
+                                        constraintViolation.getCategorizedValidationStrategy().getSeverity().equals(IValidationStrategy.Severity.ERR)
+                                                &&
+                                                constraintViolation.getCategorizedValidationStrategy().getValidationStrategy().equals(MyDataObjectValidationStrategy.S_IS_4_LONG)
+                        )
+        )
+                .as("Expected constraint violation was not found")
+                .isTrue();
+
+        assertThat(
+                constraintViolations
+                        .stream()
+                        .anyMatch(
+                                (constraintViolation) ->
+                                        constraintViolation.getCategorizedValidationStrategy().getSeverity().equals(IValidationStrategy.Severity.WARN)
+                                                &&
+                                                constraintViolation.getCategorizedValidationStrategy().getValidationStrategy().equals(MyDataObjectValidationStrategy.I_IS_7)
+                        )
+        )
+                .as("Expected constraint violation was not found")
+                .isTrue();
     }
 
     void when_referencing_the_builder_then_no_compilation_error_should_occur_since_the_builder_class_is_public_NON_COMPILABLE() {
-        final MyDataObject.MyDataObjectBuilder myDoMyDataObjectBuilder; // LEGAL: The class is not private
+        final MyDataObject.DataObjectBuilder myDoMyDataObjectBuilder; // LEGAL: The class is not private
     }
 
     void internal_build_should_be_private_NON_COMPILABLE() {
-        final MyDataObject.MyDataObjectBuilder myDoBuilder = MyDataObject.builder();
+        final MyDataObject.DataObjectBuilder myDoBuilder = MyDataObject.builder();
         // Comment out to confirm compiler error:
-        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
+        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.DataObjectBuilder'
     }
 
     void internal_builder_should_be_private_NON_COMPILABLE() {
-        final MyDataObject.MyDataObjectBuilder myDoBuilder
+        final MyDataObject.DataObjectBuilder myDoBuilder
                 // Comment out to confirm compiler error:
                 // = MyDataObject.internalBuilder()  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject'
-        ;
+                ;
     }
 
     void the_myDataObjectBuilder_constructor_should_be_private_NON_COMPILABLE() {
-        final MyDataObject.MyDataObjectBuilder myDataObjectBuilder
+        final MyDataObject.DataObjectBuilder myDataObjectBuilder
                 // Comment out to confirm compiler error:
-                // = new MyDataObject.MyDataObjectBuilder()
-                ; // ILLEGAL: 'MyDataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.MyDataObjectBuilder'
+                // = new MyDataObject.DataObjectBuilder()
+                ; // ILLEGAL: 'DataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.DataObjectBuilder'
     }
 }

@@ -9,12 +9,12 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 public class ConstraintViolation<DATA_OBJECT> {
-    private final IValidationStrategy<DATA_OBJECT> validationStrategy;
+    private final CategorizedValidationStrategy<DATA_OBJECT> categorizedValidationStrategy;
     private final String msg;
     private final Set<Pair<String, Object>> fieldsInvolvedInTheViolation;
 
     @Override
     public String toString() {
-        return validationStrategy.toString() + ", \"" + msg + "\"" + ", " + fieldsInvolvedInTheViolation.toString();
+        return this.categorizedValidationStrategy.toString() + ", \"" + this.msg + "\"" + ", " + this.fieldsInvolvedInTheViolation.toString();
     }
 }
