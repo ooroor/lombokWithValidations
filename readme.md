@@ -8,6 +8,14 @@
 ### This is _NOT_...:
 - ... a library
 ### Usage
+Given an ornamented version of...
+```
+public class MyDataObject {
+    private final int i;
+    private final String s;
+}
+```
+...you can do:
 ```
 final MyDataObject myDataObject =
     MyDataObject
