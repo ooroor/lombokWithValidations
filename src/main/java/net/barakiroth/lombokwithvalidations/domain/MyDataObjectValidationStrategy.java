@@ -3,6 +3,7 @@ package net.barakiroth.lombokwithvalidations.domain;
 import net.barakiroth.lombokwithvalidations.validation.CategorizedValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
 import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
+import net.barakiroth.lombokwithvalidations.validation.Validator;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -12,29 +13,29 @@ import java.util.Set;
 public enum MyDataObjectValidationStrategy
         implements IValidationStrategy<MyDataObject> {
     I_IS_7(
-            (final MyDataObject unvalidatedDataObject, final MyDataObjectValidationStrategy thiz, final IValidationStrategy.Severity severity) -> {
-                final ConstraintViolation<MyDataObject> constraintViolation;
-                if (unvalidatedDataObject.getI() != 7) {
-                    final Set<Pair<String, Object>> fieldsInvolvedInTheViolation = new HashSet<>() {{
-                        add(new ImmutablePair("i", unvalidatedDataObject.getI()));
-                    }};
-                    constraintViolation =
-                            new ConstraintViolation<>(CategorizedValidationStrategy.of(thiz, severity), "i differs from 7", fieldsInvolvedInTheViolation);
-                } else {
-                    constraintViolation = null;
-                }
+            // Alternative 1 of doing it (personal taste):
+            (uvdo, thiz, sev) -> {
+                final ConstraintViolation<MyDataObject> constraintViolation =
+                        Validator.validate(
+                                uvdo,
+                                CategorizedValidationStrategy.of(thiz, sev),
+                                "i differs from 7",
+                                (uvdop) -> uvdop.getI() != 7,
+                                new ImmutablePair("i", uvdo.getI())
+                        );
                 return constraintViolation;
             }
     ),
     S_IS_4_LONG(
-            (final MyDataObject unvalidatedDataObject, final MyDataObjectValidationStrategy thiz, final IValidationStrategy.Severity severity) -> {
+            // Alternative 2 of doing it (personal taste):
+            (uvdo, thiz, sev) -> {
                 final ConstraintViolation<MyDataObject> constraintViolation;
-                if (unvalidatedDataObject.getS() == null || unvalidatedDataObject.getS().length() != 4) {
+                if (uvdo.getS() == null || uvdo.getS().length() != 4) {
                     final Set<Pair<String, Object>> fieldsInvolvedInTheViolation = new HashSet<>() {{
-                        add(new ImmutablePair("s", unvalidatedDataObject.getS()));
+                        add(new ImmutablePair("s", uvdo.getS()));
                     }};
                     constraintViolation =
-                            new ConstraintViolation<>(CategorizedValidationStrategy.of(thiz, severity), "length of s differs from 4", fieldsInvolvedInTheViolation);
+                            new ConstraintViolation<>(CategorizedValidationStrategy.of(thiz, sev), "length of s differs from 4", fieldsInvolvedInTheViolation);
                 } else {
                     constraintViolation = null;
                 }
@@ -42,6 +43,7 @@ public enum MyDataObjectValidationStrategy
             }
     ),
     S_IS_BETWEEN_7_AND_11_LONG(
+            // Alternative 3 of doing it (personal taste):
             (final MyDataObject unvalidatedDataObject, final MyDataObjectValidationStrategy thiz, final IValidationStrategy.Severity severity) -> {
                 final ConstraintViolation<MyDataObject> constraintViolation;
                 if (unvalidatedDataObject.getS() == null || unvalidatedDataObject.getS().length() < 7 || unvalidatedDataObject.getS().length() > 11) {
@@ -75,7 +77,7 @@ public enum MyDataObjectValidationStrategy
     }
 
     @FunctionalInterface
-    private interface TriFunction<T, U, V, R>{
+    private interface TriFunction<T, U, V, R> {
         R apply(final T t, final U u, final V v);
     }
 }

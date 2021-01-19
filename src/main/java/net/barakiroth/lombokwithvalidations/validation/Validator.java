@@ -1,7 +1,12 @@
 package net.barakiroth.lombokwithvalidations.validation;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 public class Validator {
 
@@ -15,7 +20,7 @@ public class Validator {
     public static <DATA_OBJECT> DATA_OBJECT validate(
             final DATA_OBJECT unvalidatedMyDataObject,
             final Set<CategorizedValidationStrategy<DATA_OBJECT>> categorizedValidationStrategies,
-            final Set<ConstraintViolation<DATA_OBJECT>> constraintViolationsParm) throws ConstraintViolationException {
+            final Collection<ConstraintViolation<DATA_OBJECT>> constraintViolationsParm) throws ConstraintViolationException {
 
         final Set<ConstraintViolation<DATA_OBJECT>> constraintViolations =
                 categorizedValidationStrategies
@@ -48,5 +53,25 @@ public class Validator {
         }
 
         return validatedMyDataObject;
+    }
+
+    public static <DATA_OBJECT> ConstraintViolation<DATA_OBJECT> validate(
+            final DATA_OBJECT unvalidatedDataObject,
+            final CategorizedValidationStrategy<DATA_OBJECT> categorizedValidationStrategy,
+            final String errMsg,
+            final Function<DATA_OBJECT, Boolean> validator,
+            final Pair<String, Object>...involvedFieldsAndValues
+
+            ) {
+        final ConstraintViolation<DATA_OBJECT> constraintViolation;
+        if (validator.apply(unvalidatedDataObject)) {
+            final Set<Pair<String, Object>> fieldsInvolvedInTheViolation =
+                    new HashSet<>(Arrays.asList(involvedFieldsAndValues));
+            constraintViolation =
+                    new ConstraintViolation<>(categorizedValidationStrategy, errMsg, fieldsInvolvedInTheViolation);
+        } else {
+            constraintViolation = null;
+        }
+        return constraintViolation;
     }
 }

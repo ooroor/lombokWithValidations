@@ -28,13 +28,18 @@ try {
 ```
 ```
 final Set<ConstraintViolation<MyDataObject>> constraintViolations = new HashSet<>();
-final MyDataObject myDataObject =
-    MyDataObject.builder(
-        CategorizedValidationStrategy.ofWarn(MyDataObjectValidationStrategy.I_IS_7)
-    )
-    .build(constraintViolations);
+MyDataObject.builder(
+        CategorizedValidationStrategy
+                .ofWarn(MyDataObjectValidationStrategy.I_IS_7),
+        CategorizedValidationStrategy
+                .ofWarn(MyDataObjectValidationStrategy.S_IS_4_LONG),
+        CategorizedValidationStrategy
+                .ofWarn(MyDataObjectValidationStrategy.S_IS_BETWEEN_7_AND_11_LONG)
+)
+        .withS("1bcdefgh9")
+        .build(constraintViolations);
 if (constraintViolations.size() > 0) {
-    // Find out what happened by scrutinizing the content of the constraintViolations collection 
+    log.warn(constraintViolations.toString());
 }
 ```
 ### Future enhancements

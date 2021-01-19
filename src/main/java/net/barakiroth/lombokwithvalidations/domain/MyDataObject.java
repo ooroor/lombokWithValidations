@@ -11,6 +11,7 @@ import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.ValidationStrategyCollector;
 import net.barakiroth.lombokwithvalidations.validation.Validator;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,7 +69,7 @@ public class MyDataObject {
             return this.build(null);
         }
 
-        public MyDataObject build(final Set<ConstraintViolation<MyDataObject>> constraintViolations) {
+        public MyDataObject build(final Collection<ConstraintViolation<MyDataObject>> constraintViolations) {
 
             // First construct an unvalidated instance for the validator
             // to be able to get the builder's values because the builder
