@@ -15,15 +15,13 @@ public enum MyDataObjectValidationStrategy
     I_IS_7(
             // Alternative 1 of doing it (personal taste):
             (uvdo, thiz, sev) -> {
-                final ConstraintViolation<MyDataObject> constraintViolation =
-                        Validator.validate(
-                                uvdo,
-                                CategorizedValidationStrategy.of(thiz, sev),
-                                "i differs from 7",
-                                (uvdop) -> uvdop.getI() != 7,
-                                new ImmutablePair("i", uvdo.getI())
-                        );
-                return constraintViolation;
+                return Validator.validate(
+                        uvdo,
+                        CategorizedValidationStrategy.of(thiz, sev),
+                        "i differs from 7",
+                        (final MyDataObject uvdop) -> uvdop.getI() != 7,
+                        new ImmutablePair<>("i", uvdo.getI())
+                );
             }
     ),
     S_IS_4_LONG(
@@ -32,7 +30,7 @@ public enum MyDataObjectValidationStrategy
                 final ConstraintViolation<MyDataObject> constraintViolation;
                 if (uvdo.getS() == null || uvdo.getS().length() != 4) {
                     final Set<Pair<String, Object>> fieldsInvolvedInTheViolation = new HashSet<>() {{
-                        add(new ImmutablePair("s", uvdo.getS()));
+                        add(new ImmutablePair<>("s", uvdo.getS()));
                     }};
                     constraintViolation =
                             new ConstraintViolation<>(CategorizedValidationStrategy.of(thiz, sev), "length of s differs from 4", fieldsInvolvedInTheViolation);
@@ -44,14 +42,14 @@ public enum MyDataObjectValidationStrategy
     ),
     S_IS_BETWEEN_7_AND_11_LONG(
             // Alternative 3 of doing it (personal taste):
-            (final MyDataObject unvalidatedDataObject, final MyDataObjectValidationStrategy thiz, final IValidationStrategy.Severity severity) -> {
+            (final MyDataObject uvdo, final MyDataObjectValidationStrategy thiz, final IValidationStrategy.Severity sev) -> {
                 final ConstraintViolation<MyDataObject> constraintViolation;
-                if (unvalidatedDataObject.getS() == null || unvalidatedDataObject.getS().length() < 7 || unvalidatedDataObject.getS().length() > 11) {
+                if (uvdo.getS() == null || uvdo.getS().length() < 7 || uvdo.getS().length() > 11) {
                     final Set<Pair<String, Object>> fieldsInvolvedInTheViolation = new HashSet<>() {{
-                        add(new ImmutablePair("s", unvalidatedDataObject.getS()));
+                        add(new ImmutablePair<>("s", uvdo.getS()));
                     }};
                     constraintViolation =
-                            new ConstraintViolation<>(CategorizedValidationStrategy.of(thiz, severity), "length of s not between 7 and 11", fieldsInvolvedInTheViolation);
+                            new ConstraintViolation<>(CategorizedValidationStrategy.of(thiz, sev), "length of s not between 7 and 11", fieldsInvolvedInTheViolation);
                 } else {
                     constraintViolation = null;
                 }
