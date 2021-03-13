@@ -21,7 +21,7 @@ import java.util.Set;
         access = AccessLevel.PUBLIC,
         buildMethodName = "internalBuild",
         builderMethodName = "internalBuilder")
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter(AccessLevel.PUBLIC)
 @ToString
 public class MyDataObject {
