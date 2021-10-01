@@ -1,4 +1,4 @@
-package net.barakiroth.lombokwithvalidations.domain;
+package net.barakiroth.lombokwithvalidations.supersub;
 
 import net.barakiroth.lombokwithvalidations.validation.CategorizedValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
@@ -10,8 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum MyDataObjectValidationStrategy
-        implements IValidationStrategy<MyDataObject> {
+public enum MyDataObjectSubValidationStrategy
+        implements IValidationStrategy<MyDataObjectSub> {
     I_IS_7(
             // Alternative 1 of doing it (personal taste):
             (uvdo, thiz, sev) -> {
@@ -19,7 +19,7 @@ public enum MyDataObjectValidationStrategy
                         uvdo,
                         CategorizedValidationStrategy.of(thiz, sev),
                         "i differs from 7",
-                        (final MyDataObject uvdop) -> uvdop.getI() != 7,
+                        (final MyDataObjectSub uvdop) -> uvdop.getI() != 7,
                         new ImmutablePair<>("i", uvdo.getI())
                 );
             }
@@ -27,7 +27,7 @@ public enum MyDataObjectValidationStrategy
     S_IS_4_LONG(
             // Alternative 2 of doing it (personal taste):
             (uvdo, thiz, sev) -> {
-                final ConstraintViolation<MyDataObject> constraintViolation;
+                final ConstraintViolation<MyDataObjectSub> constraintViolation;
                 if (uvdo.getS() == null || uvdo.getS().length() != 4) {
                     final Set<Pair<String, Object>> fieldsInvolvedInTheViolation = new HashSet<>() {{
                         add(new ImmutablePair<>("s", uvdo.getS()));
@@ -42,8 +42,8 @@ public enum MyDataObjectValidationStrategy
     ),
     S_IS_BETWEEN_7_AND_11_LONG(
             // Alternative 3 of doing it (personal taste):
-            (final MyDataObject uvdo, final MyDataObjectValidationStrategy thiz, final IValidationStrategy.Severity sev) -> {
-                final ConstraintViolation<MyDataObject> constraintViolation;
+            (final MyDataObjectSub uvdo, final MyDataObjectSubValidationStrategy thiz, final Severity sev) -> {
+                final ConstraintViolation<MyDataObjectSub> constraintViolation;
                 if (uvdo.getS() == null || uvdo.getS().length() < 7 || uvdo.getS().length() > 11) {
                     final Set<Pair<String, Object>> fieldsInvolvedInTheViolation = new HashSet<>() {{
                         add(new ImmutablePair<>("s", uvdo.getS()));
@@ -57,20 +57,20 @@ public enum MyDataObjectValidationStrategy
             }
     );
 
-    public static final MyDataObjectValidationStrategy[] VALIDATION_STRATEGIES_01 =
-            new MyDataObjectValidationStrategy[]{MyDataObjectValidationStrategy.I_IS_7, MyDataObjectValidationStrategy.S_IS_BETWEEN_7_AND_11_LONG};
-    public static final MyDataObjectValidationStrategy[] VALIDATION_STRATEGIES_02 =
-            new MyDataObjectValidationStrategy[]{MyDataObjectValidationStrategy.S_IS_4_LONG};
+    public static final MyDataObjectSubValidationStrategy[] VALIDATION_STRATEGIES_01 =
+            new MyDataObjectSubValidationStrategy[]{MyDataObjectSubValidationStrategy.I_IS_7, MyDataObjectSubValidationStrategy.S_IS_BETWEEN_7_AND_11_LONG};
+    public static final MyDataObjectSubValidationStrategy[] VALIDATION_STRATEGIES_02 =
+            new MyDataObjectSubValidationStrategy[]{MyDataObjectSubValidationStrategy.S_IS_4_LONG};
 
-    private final TriFunction<MyDataObject, MyDataObjectValidationStrategy, IValidationStrategy.Severity, ConstraintViolation<MyDataObject>> validator;
+    private final TriFunction<MyDataObjectSub, MyDataObjectSubValidationStrategy, Severity, ConstraintViolation<MyDataObjectSub>> validator;
 
-    MyDataObjectValidationStrategy(
-            final TriFunction<MyDataObject, MyDataObjectValidationStrategy, IValidationStrategy.Severity, ConstraintViolation<MyDataObject>> validator) {
+    MyDataObjectSubValidationStrategy(
+            final TriFunction<MyDataObjectSub, MyDataObjectSubValidationStrategy, Severity, ConstraintViolation<MyDataObjectSub>> validator) {
         this.validator = validator;
     }
 
     @Override
-    public ConstraintViolation<MyDataObject> validate(final MyDataObject unvalidatedMyDataObject, final IValidationStrategy.Severity severity) {
+    public ConstraintViolation<MyDataObjectSub> validate(final MyDataObjectSub unvalidatedMyDataObject, final Severity severity) {
         return this.validator.apply(unvalidatedMyDataObject, this, severity);
     }
 

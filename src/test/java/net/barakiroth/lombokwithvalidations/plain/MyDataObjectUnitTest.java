@@ -1,4 +1,4 @@
-package net.barakiroth.lombokwithvalidations.domain;
+package net.barakiroth.lombokwithvalidations.plain;
 
 import net.barakiroth.lombokwithvalidations.validation.CategorizedValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
@@ -195,7 +195,6 @@ public class MyDataObjectUnitTest {
         }
     }
 
-
     @Test
     void when_created_with_warning_and_error_strategies_and_only_the_error_is_violated_then_an_exception_should_be_thrown() {
 
@@ -341,13 +340,13 @@ public class MyDataObjectUnitTest {
     void internal_build_should_be_private_NON_COMPILABLE() {
         final MyDataObject.DataObjectBuilder myDoBuilder = MyDataObject.builder();
         // Comment out to confirm compiler error:
-        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.DataObjectBuilder'
+        //myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.plain.MyDataObject.DataObjectBuilder'
     }
 
     void internal_builder_should_be_private_NON_COMPILABLE() {
         final MyDataObject.DataObjectBuilder myDoBuilder
                 // Comment out to confirm compiler error:
-                // = MyDataObject.internalBuilder()  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject'
+                // = MyDataObject.internalBuilder()  // ILLEGAL: 'internalBuilder()' has private access in 'net.barakiroth.lombokexperiments.plain.MyDataObject'
                 ;
     }
 
@@ -355,6 +354,6 @@ public class MyDataObjectUnitTest {
         final MyDataObject.DataObjectBuilder myDataObjectBuilder
                 // Comment out to confirm compiler error:
                 // = new MyDataObject.DataObjectBuilder()
-                ; // ILLEGAL: 'DataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.domain.MyDataObject.DataObjectBuilder'
+                ; // ILLEGAL: 'DataObjectBuilder()' has private access in 'net.barakiroth.lombokexperiments.plain.MyDataObject.DataObjectBuilder'
     }
 }

@@ -1,7 +1,7 @@
 package net.barakiroth.lombokwithvalidations;
 
-import net.barakiroth.lombokwithvalidations.domain.MyDataObject;
-import net.barakiroth.lombokwithvalidations.domain.MyDataObjectValidationStrategy;
+import net.barakiroth.lombokwithvalidations.plain.MyDataObject;
+import net.barakiroth.lombokwithvalidations.plain.MyDataObjectValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.CategorizedValidationStrategy;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
 import net.barakiroth.lombokwithvalidations.validation.ConstraintViolationException;

@@ -1,15 +1,10 @@
-package net.barakiroth.lombokwithvalidations.domain;
+package net.barakiroth.lombokwithvalidations.plain;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import net.barakiroth.lombokwithvalidations.validation.CategorizedValidationStrategy;
-import net.barakiroth.lombokwithvalidations.validation.ConstraintViolation;
-import net.barakiroth.lombokwithvalidations.validation.IValidationStrategy;
-import net.barakiroth.lombokwithvalidations.validation.ValidationStrategyCollector;
-import net.barakiroth.lombokwithvalidations.validation.Validator;
+import net.barakiroth.lombokwithvalidations.validation.*;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,7 +16,6 @@ import java.util.Set;
         access = AccessLevel.PUBLIC,
         buildMethodName = "internalBuild",
         builderMethodName = "internalBuilder")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter(AccessLevel.PUBLIC)
 @ToString
 public class MyDataObject {
@@ -38,8 +32,10 @@ public class MyDataObject {
         return MyDataObject.internalBuilder(ValidationStrategyCollector.collect(categorizedValidationStrategies));
     }
     // AND/OR:
+
     /**
      * All provided strategies will be supplied with an error severity.
+     *
      * @param validationStrategies
      * @return
      */
@@ -63,7 +59,8 @@ public class MyDataObject {
 
         private Set<CategorizedValidationStrategy<MyDataObject>> uniqueCategorizedValidationStrategies;
 
-        private DataObjectBuilder() {}
+        private DataObjectBuilder() {
+        }
 
         public MyDataObject build() {
             return this.build(null);
