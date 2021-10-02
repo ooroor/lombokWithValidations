@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 @Getter(AccessLevel.PUBLIC)
-@SuperBuilder(
-        setterPrefix = "with",
-        buildMethodName = "internalBuild",
-        builderMethodName = "internalBuilder")
+@SuperBuilder(setterPrefix = "with")
 public class MyDataObjectSuper {
     private final int i;
 }

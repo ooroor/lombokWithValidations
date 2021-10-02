@@ -341,7 +341,7 @@ public class MyDataObjectSubUnitTest {
         final MyDataObjectSub.MyDataObjectSubBuilder myDoBuilder = MyDataObjectSub.builder();
         // Comment out to confirm compiler error:
         // TODO: The following should NOT be possible!
-        myDoBuilder.internalBuild(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.plain.MyDataObject.DataObjectBuilder'
+        myDoBuilder.build(); // ILLEGAL - 'internalBuild()' has private access in 'net.barakiroth.lombokexperiments.plain.MyDataObject.DataObjectBuilder'
     }
 
     @Test

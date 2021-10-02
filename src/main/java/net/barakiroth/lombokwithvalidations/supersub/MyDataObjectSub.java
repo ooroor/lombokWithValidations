@@ -10,21 +10,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter(AccessLevel.PUBLIC)
-@SuperBuilder(
-        setterPrefix = "with",
-        buildMethodName = "internalBuild",
-        builderMethodName = "internalBuilder")
+@SuperBuilder(setterPrefix = "with")
 public class MyDataObjectSub extends MyDataObjectSuper {
 
     private final String s;
 
     public static MyDataObjectSub.MyDataObjectSubBuilder<?, ?> builder() {
-        return MyDataObjectSub.internalBuilder(new HashSet<>());
+        return MyDataObjectSub.builder(new HashSet<>());
     }
 
-    @SafeVarargs
     public static MyDataObjectSub.MyDataObjectSubBuilder<?, ?> builder(final CategorizedValidationStrategy<MyDataObjectSub>... categorizedValidationStrategies) {
-        return MyDataObjectSub.internalBuilder(ValidationStrategyCollector.collect(categorizedValidationStrategies));
+        return MyDataObjectSub.builder(ValidationStrategyCollector.collect(categorizedValidationStrategies));
     }
 
     /**
@@ -33,37 +29,25 @@ public class MyDataObjectSub extends MyDataObjectSuper {
      * @param validationStrategies
      * @return
      */
-    @SafeVarargs
     public static MyDataObjectSub.MyDataObjectSubBuilder<?, ?> builder(final IValidationStrategy<MyDataObjectSub>... validationStrategies) {
-        return MyDataObjectSub.internalBuilder(ValidationStrategyCollector.collect(validationStrategies));
+        return MyDataObjectSub.builder(ValidationStrategyCollector.collect(validationStrategies));
     }
 
-    private static MyDataObjectSub.MyDataObjectSubBuilder<?, ?> internalBuilder(final Set<CategorizedValidationStrategy<MyDataObjectSub>> uniqueCategorizedValidationStrategies) {
+    private static MyDataObjectSub.MyDataObjectSubBuilder<?, ?> builder(final Set<CategorizedValidationStrategy<MyDataObjectSub>> uniqueCategorizedValidationStrategies) {
 
-        final MyDataObjectSub.MyDataObjectSubBuilderImpl dataObjectBuilder =
-                (MyDataObjectSub.MyDataObjectSubBuilderImpl) MyDataObjectSub.internalBuilder();
+        final MyDataObjectSub.MyDataObjectSubBuilderImpl dataObjectBuilder = new MyDataObjectSubBuilderImpl();
         dataObjectBuilder.setUniqueCategorizedValidationStrategies(uniqueCategorizedValidationStrategies);
 
         return dataObjectBuilder;
     }
-
-    public static MyDataObjectSub.MyDataObjectSubBuilder<?, ?> internalBuilder() {
-        return new MyDataObjectSubBuilderImpl();
-    }
-
+    // -----------------------------------------------------------------------------------------------------------------
     public static abstract class MyDataObjectSubBuilder<C extends MyDataObjectSub, B extends MyDataObjectSubBuilder<C, B>> extends MyDataObjectSuperBuilder<C, B> {
 
-        public C build() {
-            return internalBuild();
-        }
-
         public C build(final Collection<ConstraintViolation<MyDataObjectSub>> constraintViolations) {
-            return internalBuild(constraintViolations);
+            return build(constraintViolations);
         }
-
-        protected abstract C internalBuild(final Collection<ConstraintViolation<MyDataObjectSub>> constraintViolations);
     }
-
+    // -----------------------------------------------------------------------------------------------------------------
     private static final class MyDataObjectSubBuilderImpl extends MyDataObjectSubBuilder<MyDataObjectSub, MyDataObjectSubBuilderImpl> {
 
         private Set<CategorizedValidationStrategy<MyDataObjectSub>> uniqueCategorizedValidationStrategies;
@@ -72,12 +56,13 @@ public class MyDataObjectSub extends MyDataObjectSuper {
             this.uniqueCategorizedValidationStrategies = uniqueCategorizedValidationStrategies;
         }
 
-        public MyDataObjectSub internalBuild() {
-            return internalBuild(null);
+        public MyDataObjectSub build() {
+            return build(null);
         }
 
-        public MyDataObjectSub internalBuild(final Collection<ConstraintViolation<MyDataObjectSub>> constraintViolations) {
+        public MyDataObjectSub build(final Collection<ConstraintViolation<MyDataObjectSub>> constraintViolations) {
             return Validator.validate(new MyDataObjectSub(this), this.uniqueCategorizedValidationStrategies, constraintViolations);
         }
     }
+    // -----------------------------------------------------------------------------------------------------------------
 }
