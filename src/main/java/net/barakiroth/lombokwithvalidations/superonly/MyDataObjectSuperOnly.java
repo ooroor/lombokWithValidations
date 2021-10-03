@@ -40,49 +40,6 @@ public class MyDataObjectSuperOnly {
 
         return dataObjectBuilder;
     }
-
-    /*
-    protected MyDataObjectSuperOnly(MyDataObjectSuperOnlyBuilder<?, ?> b) {
-        this.i = b.i;
-        this.s = b.s;
-    }
-
-    public static MyDataObjectSuperOnlyBuilder<?, ?> builder() {
-        return new MyDataObjectSuperOnlyBuilderImpl();
-    }
-*/
-    // -----------------------------------------------------------------------------------------------------------------
-    public static abstract class MyDataObjectSuperOnlyBuilder<C extends MyDataObjectSuperOnly, B extends MyDataObjectSuperOnlyBuilder<C, B>> {
-
-
-        //public abstract C build();
-/*
-        public C build(final Collection<ConstraintViolation<MyDataObjectSuperOnly>> constraintViolations) {
-            return build(constraintViolations);
-        }
-*/
-    /*
-        private int i;
-        private String s;
-
-        public B withI(int i) {
-            this.i = i;
-            return self();
-        }
-
-        public B withS(String s) {
-            this.s = s;
-            return self();
-        }
-
-        protected abstract B self();
-
-
-        public String toString() {
-            return "MyDataObjectSub.MyDataObjectSuperOnlyBuilder(i=" + this.i + ", s=" + this.s + ")";
-        }
-     */
-    }
     // -----------------------------------------------------------------------------------------------------------------
     private static final class MyDataObjectSuperOnlyBuilderImpl extends MyDataObjectSuperOnlyBuilder<MyDataObjectSuperOnly, MyDataObjectSuperOnlyBuilderImpl> {
 
@@ -91,15 +48,6 @@ public class MyDataObjectSuperOnly {
         private void setUniqueCategorizedValidationStrategies(final Set<CategorizedValidationStrategy<MyDataObjectSuperOnly>> uniqueCategorizedValidationStrategies) {
             this.uniqueCategorizedValidationStrategies = uniqueCategorizedValidationStrategies;
         }
-
-        /*
-        private MyDataObjectSuperOnlyBuilderImpl() {
-        }
-
-        protected MyDataObjectSuperOnlyBuilderImpl self() {
-            return this;
-        }
-     */
 
         public MyDataObjectSuperOnly build() {
             return build(null);
