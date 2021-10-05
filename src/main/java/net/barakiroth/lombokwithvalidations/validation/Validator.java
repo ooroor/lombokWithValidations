@@ -25,7 +25,20 @@ public class Validator {
         final Set<ConstraintViolation<DATA_OBJECT>> constraintViolations =
                 categorizedValidationStrategies
                         .stream()
-                        .map(categorizedValidationStrategy -> categorizedValidationStrategy.getValidationStrategy().validate(unvalidatedMyDataObject, categorizedValidationStrategy.getSeverity()))
+                        .filter(
+                                categorizedValidationStrategy ->
+                                        categorizedValidationStrategy != null && categorizedValidationStrategy.getValidationStrategy() != null
+                        )
+                        .map(
+                                categorizedValidationStrategy ->
+                                        categorizedValidationStrategy
+                                                .getValidationStrategy()
+                                                .validate(
+                                                        unvalidatedMyDataObject,
+                                                        categorizedValidationStrategy
+                                                                .getSeverity()
+                                                )
+                        )
                         .filter(constraintViolation -> constraintViolation != null)
                         .collect(HashSet::new, HashSet::add, HashSet::addAll);
 
@@ -60,9 +73,9 @@ public class Validator {
             final CategorizedValidationStrategy<DATA_OBJECT> categorizedValidationStrategy,
             final String errMsg,
             final Function<DATA_OBJECT, Boolean> validator,
-            final Pair<String, Object>...involvedFieldsAndValues
+            final Pair<String, Object>... involvedFieldsAndValues
 
-            ) {
+    ) {
         final ConstraintViolation<DATA_OBJECT> constraintViolation;
         if (validator.apply(unvalidatedDataObject)) {
             final Set<Pair<String, Object>> fieldsInvolvedInTheViolation =

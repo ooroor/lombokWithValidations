@@ -333,6 +333,18 @@ public class MyDataObjectUnitTest {
                 .isTrue();
     }
 
+    @Test
+    void when_calling_build_when_the_builder_is_created_with_null_CategorizedValidationStrategy_then_no_exception_should_be_thrown() {
+        assertThatCode(() -> MyDataObject.builder((CategorizedValidationStrategy<MyDataObject>)null).build())
+                .doesNotThrowAnyException();
+    }
+
+    @Test
+    void when_calling_build_when_the_builder_is_created_with_null_IValidationStrategy_then_no_exception_should_be_thrown() {
+        assertThatCode(() -> MyDataObject.builder((IValidationStrategy<MyDataObject>)null).build())
+                .doesNotThrowAnyException();
+    }
+
     void when_referencing_the_builder_then_no_compilation_error_should_occur_since_the_builder_class_is_public_NON_COMPILABLE() {
         final MyDataObject.DataObjectBuilder myDoMyDataObjectBuilder; // LEGAL: The class is not private
     }
