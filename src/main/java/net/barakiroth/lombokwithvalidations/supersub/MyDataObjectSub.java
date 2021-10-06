@@ -46,10 +46,7 @@ public class MyDataObjectSub extends MyDataObjectSuper {
     }
     // -----------------------------------------------------------------------------------------------------------------
     public static abstract class MyDataObjectSubBuilder<C extends MyDataObjectSub, B extends MyDataObjectSubBuilder<C, B>> extends MyDataObjectSuperBuilder<C, B> {
-
-        public C build(final Collection<ConstraintViolation<MyDataObjectSub>> constraintViolations) {
-            return build(constraintViolations);
-        }
+        public abstract C build(final Collection<ConstraintViolation<MyDataObjectSub>> constraintViolations);
     }
     // -----------------------------------------------------------------------------------------------------------------
     private static final class MyDataObjectSubBuilderImpl extends MyDataObjectSubBuilder<MyDataObjectSub, MyDataObjectSubBuilderImpl> {
